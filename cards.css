@@ -1,0 +1,22 @@
+img.handcards{
+width:8.5%;
+height:auto;
+}
+img.boardcards{
+width:8.5%;
+height:auto;
+}
+img.carddetail{
+width:auto;
+height:90%;
+text-align:center;
+display:block;
+}
+
+#menu {
+    display: none;
+    position: absolute;
+    padding: 10px;
+    background-color: #ddd;
+    border: 1px solid #000;
+}

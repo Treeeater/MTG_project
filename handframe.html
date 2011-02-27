@@ -1,0 +1,55 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="cards.css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script src = "cards.js"></script>
+<title>
+your hand
+</title>
+</head>
+<body>
+<div style="border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-style: solid; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; position: absolute; background-color: rgb(238, 238, 238); top: 664px; left: 717px; display: none; " id="menu"><li>put into play</li>
+<li>put back onto top of library</li>
+</div>
+<script id = "example_in_index2">
+var cards = 7;
+function playThisCard()
+{
+	var nameofcard = this.src;
+	cards--;
+	this.parentNode.removeChild(this);
+	modifycardno();
+	showinboards(nameofcard);
+}
+function modifycardno()
+{
+	//document.getElementById("handcardno").innerHTML="you have "+ cards + " cards in your hand"; 
+}
+function showinboards(nameofcard)
+{
+	var board = window.parent.document.getElementById("myboardframe").contentDocument;
+	var newimg = board.createElement('img');
+	newimg.setAttribute('src', nameofcard);
+	newimg.setAttribute('class', 'boardcards');
+	board.body.appendChild(newimg);
+}
+</script>
+<img id = "1" src=inquisition.jpeg class = "handcards"/>
+<img id = "2" src=jace.jpeg class = "handcards"/>
+<img id = "3" src=bitterblossom.jpeg class = "handcards"/>
+<img id = "4" src=spellstutter_sprite.jpeg class = "handcards"/>
+<img id = "5" src=sunken_ruins.jpeg class = "handcards"/>
+<img id = "6" src=island.jpeg class = "handcards"/>
+<img id = "7" src=secluded_glen.jpeg class = "handcards"/>
+<script id = "example2_in_index2">
+var Allimage = document.getElementsByTagName("img");
+var i = 0;
+for (i=0;i<Allimage.length;i++)
+{
+	Allimage[i].ondblclick=playThisCard;
+	Allimage[i].onclick=display;
+}
+//alert(document.getElementById("3").toString());
+</script>
+</body>
+</html>
