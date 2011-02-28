@@ -8,6 +8,7 @@ include "websocket.class.php";
 class MTG extends WebSocket{
 		var $players = array();
 		var $ready = 0;		#ready means number of ready players
+		var $wanderers = array();
         function process($user,$msg){
                 $this->say("< ".$msg);
 				if (strcmp("join:",substr($msg,0,5))==0)
@@ -57,9 +58,26 @@ class MTG extends WebSocket{
 				{
 					$msg = substr($msg,5);
 					$msg = htmlspecialchars($msg);
+					array_push($this->wanderers,$msg);
+					print("pushed ".$msg." into wanderers\n");
 					foreach($this->users as $buf){
 						$this->send($buf->socket,$buf->id."&gt; "."init:".$msg);
 					}
+				}
+				elseif (strcmp("refs:",substr($msg,0,5))==0)
+				{
+					$sendingstring = "";
+					$msg = substr($msg,5);
+					$msg = htmlspecialchars($msg);
+					if ((array_search($msg,$this->wanderers)==false)&&($this->wanderers[0]!=$msg)){
+						array_push($this->wanderers,$msg);	#if timeouted, repush.
+					}
+					foreach($this->wanderers as $wanderer){
+						if (strcmp($wanderer,"")!=0){
+							$sendingstring = $sendingstring."|".$wanderer;
+						}
+					}
+					$this->send($user->socket,$user->id."&gt; "."refs:".$sendingstring);
 				}
         }
 };

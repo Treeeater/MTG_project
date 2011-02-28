@@ -1,5 +1,6 @@
 var sock;
 var players = [];
+var wanderers = [];
 var analyzeMessage = function(msg){
 	//alert(msg.data);
 	var message = msg.data;
@@ -42,6 +43,24 @@ var analyzeMessage = function(msg){
 	{
 		window.open("sealed.html","_self");
 	}
+	if (typeOfMessage == "refs:")
+	{
+		var bodySplited = messageBody.split('|');
+		var sel = document.getElementById('lobbylist');
+		sel.length = 0;
+		for (i = 0; i<bodySplited.length; i++)
+		{
+			if (bodySplited[i]!="")
+			{
+				var newwanderer = document.createElement('option');
+				newwanderer.innerHTML = bodySplited[i];
+				newwanderer.setAttribute('value',bodySplited[i]);
+				newwanderer.setAttribute('id',"wanderer_"+bodySplited[i]);
+				sel.appendChild(newwanderer);
+				wanderers.push(bodySplited[i]);				
+			}
+		}
+	}
 };
 function init(){
         if("WebSocket" in window){
@@ -77,7 +96,13 @@ function send(type){
 		if (type == "init"){
 			messageToSend = "init:"+document.getElementById('usrname').value;
 		}
+		if (type == "refs"){
+			messageToSend = "refs:"+document.getElementById('usrname').value;
+		}
         sock.send(messageToSend);
+}
+function refresh(){
+	send("refs");
 }
 function join(){
 		send("join");
