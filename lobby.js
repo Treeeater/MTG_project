@@ -1,6 +1,4 @@
 var sock;
-var players = [];
-var wanderers = [];
 var analyzeMessage = function(msg){
 	//alert(msg.data);
 	var message = msg.data;
@@ -10,21 +8,12 @@ var analyzeMessage = function(msg){
 	var messageBody = message.substring(5);
 	if (typeOfMessage == "join:")
 	{
-		var i = 0;
-		var flag = true;
-		for (i = 0;i<players.length;i++){
-			if (messageBody == players[i]) flag = false;
-		}
-		if (flag == true)
-		{
-			var sel = document.getElementById('playerlist');
-			var newplayer = document.createElement('option');
-			newplayer.innerHTML = messageBody;
-			newplayer.setAttribute('value',messageBody);
-			newplayer.setAttribute('id',messageBody);
-			sel.appendChild(newplayer);
-			players.push(messageBody);
-		}
+		var sel = document.getElementById('playerlist');
+		var newplayer = document.createElement('option');
+		newplayer.innerHTML = messageBody;
+		newplayer.setAttribute('value',messageBody);
+		newplayer.setAttribute('id',messageBody);
+		sel.appendChild(newplayer);
 	}
 	if (typeOfMessage == "chat:")
 	{
@@ -33,14 +22,21 @@ var analyzeMessage = function(msg){
 	if (typeOfMessage == "leav:")
 	{
 		var sel = document.getElementById('playerlist');
+		var sel2 = document.getElementById('lobbylist');
+		var del = document.getElementById(messageBody);
+		if (del) sel.removeChild(del);
+		var del2 = document.getElementById("wanderer_"+messageBody);
+		if (del2) sel2.removeChild(del2);
+	}
+	if (typeOfMessage == "lvgm:")
+	{
+		var sel = document.getElementById('playerlist');
 		var del = document.getElementById(messageBody);
 		sel.removeChild(del);
-		for (i = 0;i<players.length;i++){
-			if (messageBody == players[i]) players[i] = "";
-		}		
 	}
 	if (typeOfMessage == "redy:")
 	{
+		send("disconnect");
 		window.open("sealed.html","_self");
 	}
 	if (typeOfMessage == "refs:")
@@ -56,25 +52,30 @@ var analyzeMessage = function(msg){
 				newwanderer.innerHTML = bodySplited[i];
 				newwanderer.setAttribute('value',bodySplited[i]);
 				newwanderer.setAttribute('id',"wanderer_"+bodySplited[i]);
-				sel.appendChild(newwanderer);
-				wanderers.push(bodySplited[i]);				
+				sel.appendChild(newwanderer);		
 			}
 		}
 	}
 };
+function refresh(){
+	send("refs");
+}
 function init(){
         if("WebSocket" in window){
-                sock = new WebSocket("ws://192.168.1.102:12345/");
-                sock.onopen = function(msg){ notifyStatus("connected! Ready state="+this.readyState); send('init'); document.getElementById("chatInput").disabled = false; };
+                sock = new WebSocket("ws://www.yuchenzhou.com:12345/");
+                sock.onopen = function(msg){ notifyStatus("connected! Ready state="+this.readyState,1); send('init'); document.getElementById("chatInput").disabled = false; };
                 sock.onmessage = analyzeMessage;
-                sock.onclose = function(msg){ send("disconnect"); notifyStatus("Disconnected"); };
+                sock.onclose = function(msg){ send("disconnect"); notifyStatus("Disconnected",2); };
+				setTimeout("refresh();",1000);
         } else {
                 alert("Your browser does not support WebSockets");
         }
 }
-function notifyStatus(msg){
+function notifyStatus(msg,stat){
 		var ele = document.getElementById("status");
-		ele.value = msg;
+		ele.innerHTML = msg;
+		if (stat == 1) ele.style.color = '#808000';
+		if (stat == 2) ele.style.color = '#FF0000';
 }
 function chat(msg){
         var ele = document.getElementById("chatBox");
@@ -99,20 +100,23 @@ function send(type){
 		if (type == "refs"){
 			messageToSend = "refs:"+document.getElementById('usrname').value;
 		}
+		if (type == "lvgm"){
+			messageToSend = "lvgm:"+document.getElementById('usrname').value;
+		}
         sock.send(messageToSend);
-}
-function refresh(){
-	send("refs");
 }
 function join(){
 		send("join");
 		document.getElementById('joinButton').setAttribute('disabled','disabled');
 		document.getElementById('leaveButton').removeAttribute('disabled');
 }
-function leave(){
-		send("disconnect");
+function leaveGame(){
+		send("lvgm");			//just leave the game table, but not the lobby.
 		document.getElementById('leaveButton').setAttribute('disabled','disabled');
 		document.getElementById('joinButton').removeAttribute('disabled');
+}
+function leave(){
+		send("disconnect");
 }
 function enterChat(e){
         if(e.keyCode == 13) send("chat");

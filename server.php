@@ -1,14 +1,18 @@
 #!/usr/bin/php
-
 <?php
 
+include "linklist.php";
 include "websocket.class.php";
 # action code: join     a player joins the lobby
 
 class MTG extends WebSocket{
-		var $players = array();
-		var $ready = 0;		#ready means number of ready players
-		var $wanderers = array();
+		private $players;
+		private $wanderers;
+		function __construct($address,$port){
+			$this->players = new DoublyLinkedList() or die("Linklist constructor failed");
+			$this->wanderers = new DoublyLinkedList() or die("Linklist constructor failed");
+			parent::__construct($address,$port);
+		}
         function process($user,$msg){
                 $this->say("< ".$msg);
 				if (strcmp("join:",substr($msg,0,5))==0)
@@ -16,16 +20,16 @@ class MTG extends WebSocket{
 					//client sends a join request.
 					$msg = substr($msg,5);
 	                $msg = htmlspecialchars($msg);
-					array_push($this->players,$msg);
-					$this->ready++;
+					$this->players->insertLast($msg);
 					foreach($this->users as $buf){
-						foreach($this->players as $player){
-							if (strcmp($player,"")!=0){
-								$this->send($buf->socket,$buf->id."&gt; "."join:".$player);
-							}
-						}
+						#while ($CurrentNode!=NULL)
+						#{
+							#$this->send($buf->socket,$buf->id."&gt; "."join:".$CurrentNode->data);
+							#$CurrentNode = $CurrentNode->next;
+						#}
+						$this->send($buf->socket,$buf->id."&gt; "."join:".$msg);
 					}
-					if ($this->ready == 2)
+					if ($this->players->totalNodes() == 2)
 					{
 						foreach($this->users as $buf2){
 							$this->send($buf2->socket,$buf2->id."&gt; "."redy:");
@@ -44,22 +48,22 @@ class MTG extends WebSocket{
 				elseif (strcmp("leav:",substr($msg,0,5))==0)
 				{
 					//client exits the site.
+					//need to add code to detect if the user really logged in.
 					$msg = substr($msg,5);
 					$msg = htmlspecialchars($msg);
-					//FIXME:this remove function is clunky. Will cause memory leak.
-					$index = array_search($msg,$this->players);
-					$this->players[$index]="";
+					$this->players->deleteNode($msg);
+					$this->wanderers->deleteNode($msg);
 					foreach($this->users as $buf){
 						$this->send($buf->socket,$buf->id."&gt; "."leav:".$msg);
 					}
-					$this->ready--;
 				}
 				elseif (strcmp("init:",substr($msg,0,5))==0)
 				{
+					//need to add code to detect if this user already logged in.
 					$msg = substr($msg,5);
 					$msg = htmlspecialchars($msg);
-					array_push($this->wanderers,$msg);
-					print("pushed ".$msg." into wanderers\n");
+					$this->wanderers->insertLast($msg);
+					$CurrentNode = $this->wanderers->firstNode();
 					foreach($this->users as $buf){
 						$this->send($buf->socket,$buf->id."&gt; "."init:".$msg);
 					}
@@ -69,20 +73,32 @@ class MTG extends WebSocket{
 					$sendingstring = "";
 					$msg = substr($msg,5);
 					$msg = htmlspecialchars($msg);
-					if ((array_search($msg,$this->wanderers)==false)&&($this->wanderers[0]!=$msg)){
-						array_push($this->wanderers,$msg);	#if timeouted, repush.
+					if (!$this->wanderers->existNode($msg)){
+						$this->wanderers->insertLast($msg);	#if timeouted, repush.
 					}
-					foreach($this->wanderers as $wanderer){
-						if (strcmp($wanderer,"")!=0){
-							$sendingstring = $sendingstring."|".$wanderer;
-						}
+					$CurrentNode = $this->wanderers->firstNode();
+					while ($CurrentNode!=NULL)
+					{
+						$sendingstring = $sendingstring."|".$CurrentNode->data;
+						$CurrentNode = $CurrentNode->next;
 					}
 					$this->send($user->socket,$user->id."&gt; "."refs:".$sendingstring);
+				}
+				elseif (strcmp("lvgm:",substr($msg,0,5))==0)
+				{
+					//client sends a join request.
+					$msg = substr($msg,5);
+	                $msg = htmlspecialchars($msg);
+					$this->players->deleteNode($msg);
+					$CurrentNode = $this->players->firstNode();
+					foreach($this->users as $buf){
+						$this->send($buf->socket,$buf->id."&gt; "."lvgm:".$msg);
+					}
 				}
         }
 };
  
-$master = new MTG("192.168.1.102",12345);
+$master = new MTG("192.168.1.200",12345);
 
 
 

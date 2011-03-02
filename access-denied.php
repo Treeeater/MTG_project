@@ -10,5 +10,7 @@
 <p align="center">&nbsp;</p>
 <h4 align="center" class="err">Access Denied!<br />
   You do not have access to this resource.</h4>
+<h4 align="center">
+  You can <a href = "index.php">login</a> to continue.</h4>
 </body>
 </html>
