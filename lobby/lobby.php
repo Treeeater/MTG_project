@@ -1,5 +1,5 @@
 <?php
-	require_once('login/auth.php');
+	require_once('../login/auth.php');
 ?>
 <html>
 <head>

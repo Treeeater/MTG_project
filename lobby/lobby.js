@@ -37,7 +37,7 @@ var analyzeMessage = function(msg){
 	if (typeOfMessage == "redy:")
 	{
 		send("disconnect");
-		window.open("sealed.html","_self");
+		window.open("../sealed/sealed.php","_self");
 	}
 	if (typeOfMessage == "refs:")
 	{
