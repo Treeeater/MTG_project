@@ -4,6 +4,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="lobby.css" />
+<script src="../lib/jQuery.js"></script>
 <script src="lobby.js"></script>
 </head>
 <title>
@@ -30,7 +31,7 @@ Magic The Gathering test app
 </div>
 </div>
 <div id = "chatWrapper" align = "center" class="wrapper">
-<div>UserName:<input type="text" id="usrname" value = "<?php echo $_SESSION['SESS_FIRST_NAME'];?>" onkeydown="enterUserName(event);"/></div>
+<div>UserName:<input type="text" id="usrname" value = "<?php echo $_SESSION['SESS_FIRST_NAME'];?>" disabled="disabled" onkeydown="enterUserName(event);"/></div>
 status bar:<span id="status">Connecting</span>
 <div class = "chatBoxClass" id = "chatBox"></div>
 <div>Type what you want to say here:<input type="text" id="chatInput" value="Hi" onkeydown="enterChat(event);" disabled="disabled" /></div>

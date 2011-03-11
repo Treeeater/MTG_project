@@ -2,8 +2,8 @@ var sock;
 var analyzeMessage = function(msg){
 	//alert(msg.data);
 	var message = msg.data;
-	var splited = message.split(' ');
-	message = message.substring(splited[0].length+1);
+	var index = message.indexOf(' ');
+	message = message.substring(index+1);
 	var typeOfMessage = message.substring(0,5);
 	var messageBody = message.substring(5);
 	if (typeOfMessage == "join:")
@@ -36,8 +36,30 @@ var analyzeMessage = function(msg){
 	}
 	if (typeOfMessage == "redy:")
 	{
-		send("disconnect");
+	/*
+		if ($("#playerlist option:first").text() == $("#usrname").attr('value'))
+		{
+			//only first player on the list send the starting request
+			send("sealed");
+		}*/
 		window.open("../sealed/sealed.php","_self");
+	}
+	if (typeOfMessage == "refp:")
+	{
+		var bodySplited = messageBody.split('|');
+		var sel = document.getElementById('playerlist');
+		sel.length = 0;
+		for (i = 0; i<bodySplited.length; i++)
+		{
+			if (bodySplited[i]!="")
+			{
+				var newplayer = document.createElement('option');
+				newplayer.innerHTML = bodySplited[i];
+				newplayer.setAttribute('value',bodySplited[i]);
+				newplayer.setAttribute('id',"player_"+bodySplited[i]);
+				sel.appendChild(newplayer);		
+			}
+		}
 	}
 	if (typeOfMessage == "refs:")
 	{
@@ -102,6 +124,14 @@ function send(type){
 		}
 		if (type == "lvgm"){
 			messageToSend = "lvgm:"+document.getElementById('usrname').value;
+		}
+		if (type == "sealed"){
+			var i;
+			for ( i = 0; i<$("#playerlist option").size(); i++)
+			{
+				messageToSend = messageToSend + $("#playerlist option:eq("+i+")").text() + ";";
+			}
+			messageToSend = "seal:" + messageToSend;
 		}
         sock.send(messageToSend);
 }

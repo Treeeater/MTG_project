@@ -1,0 +1,49 @@
+建表规则：
+
+CREATE TABLE cards(
+	id		INT AUTO_INCREMENT PRIMARY KEY,		//unique id，每张牌都不一样
+	innerid	INT,								//在这个系列中第几张（牌最下面一排有个数字）
+	name	VARCHAR(40),						//名字（英文）
+	cmc		INT,								//几点费 （带X的 忽略X，带延缓的牌为0）
+	color	INT,								//5位的二进制数，顺序从高位到低位(WUBRG) 比如一张牌是UR多色就是2+8=10
+	type	INT,								//8位的二进制数，顺序从高位到低位(部族128、旅法师64、结界32、神器16、瞬间8、法术4、生物2、地1)
+	rarity	INT,								//0-普通牌 1-银牌 2-金牌 3-密稀
+	power	INT,								//攻击
+	toughness	INT,							//防御
+	expansion	VARCHAR(4)						//版本：拉尼卡：RAV，工会：GDP 纷争：DIS
+	)
+
+
+INSERT INTO  `mtg_cards`.`cards` (
+`id` ,
+`innerid` ,
+`name` ,
+`cmc` ,
+`color` ,
+`type` ,
+`rarity` ,
+`power` ,
+`toughness` ,
+`expansion`
+)
+VALUES (
+'81',  '81',  'Dark Confidant',  '2',  '4',  '2',  '2',  '2',  '1',  'RAV'
+)
+
+INSERT INTO  `mtg_cards`.`cards` (
+`id` ,
+`innerid` ,
+`name` ,
+`cmc` ,
+`color` ,
+`type` ,
+`rarity` ,
+`power` ,
+`toughness` ,
+`expansion`
+)
+VALUES (
+'207',  '207',  'Glare of Subdual',  '4',  '17',  '32',  '2',  NULL,  NULL,  'RAV'
+)
+
+document.getElementById('sideframe').contentWindow.document.getElementById('userinfoframe').contentWindow.cards
