@@ -1,10 +1,10 @@
 function display(){
 var win = window.top.document;
 var sf = win.getElementById('sideframe').contentDocument;
-var cd = sf.getElementById('carddetail').contentDocument;
+var cd = sf.getElementById('carddetailframe').contentDocument;
 cd.getElementById('bigCard').src = this.getAttribute('src');
 }
-
+/*
 $(document).ready(function() {
 
 	$("\\img").bind("contextmenu", function(e) {
@@ -24,4 +24,4 @@ $(document).ready(function() {
         $('#menu').hide();
     });
 
-});
+});*/

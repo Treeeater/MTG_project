@@ -6,13 +6,13 @@
 </head>
 <body>
 Color:
-<table border="1">
+<table class="infotable">
 <tr>
-<td><img src="resources/mana/W.png"></img></td>
-<td><img src="resources/mana/U.png"></img></td>
-<td><img src="resources/mana/B.png"></img></td>
-<td><img src="resources/mana/R.png"></img></td>
-<td><img src="resources/mana/G.png"></img></td>
+<td><img src="resources/mana/W.png" class = "manasymbols"></img></td>
+<td><img src="resources/mana/U.png" class = "manasymbols"></img></td>
+<td><img src="resources/mana/B.png" class = "manasymbols"></img></td>
+<td><img src="resources/mana/R.png" class = "manasymbols"></img></td>
+<td><img src="resources/mana/G.png" class = "manasymbols"></img></td>
 <td>A</td>
 </tr>
 <tr>
@@ -25,7 +25,7 @@ Color:
 </tr>
 </table>
 MC:
-<table border="1">
+<table class="infotable">
 <tr>
 <td>1</td>
 <td>2</td>
@@ -43,5 +43,7 @@ MC:
 <td><span id = "5pcount">0</span></td>
 </tr>
 </table>
+<div>Total: <span id = "totalCards">0</span> cards</div>
+<div>Lands: <span id = "totalLands">0</span> cards</div>
 </body>
 </html>

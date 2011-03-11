@@ -3,3 +3,35 @@ height:50%;
 width:auto;
 border: 1px solid #000;
 }
+img.manasymbols{
+height:50%;
+width:auto;
+text-align:center;
+}
+table.infotable {
+	border-width: 1px;
+	border-spacing: ;
+	border-style: solid;
+	border-color: red;
+	border-collapse: collapse;
+	background-color: rgb(250, 240, 230);
+	text-align:center;
+}
+table.infotable th {
+	text-align:center;
+	border-width: 1px;
+	padding: 3px;
+	border-style: ridge;
+	border-color: blue;
+	background-color: white;
+	-moz-border-radius: ;
+}
+table.infotable td {
+	text-align:center;
+	border-width: 1px;
+	padding: 3px;
+	border-style: ridge;
+	border-color: blue;
+	background-color: white;
+	-moz-border-radius: ;
+}

@@ -8,9 +8,11 @@ height:auto;
 }
 img.carddetail{
 width:auto;
-height:90%;
+height:70%;
 text-align:center;
-display:block;
+margin-top:0px;
+margin-bottom:0px;
+padding:0px;
 }
 
 #menu {

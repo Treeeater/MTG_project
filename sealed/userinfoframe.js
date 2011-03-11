@@ -4,6 +4,25 @@ function notImpl()
 }
 var sock;
 var cards;
+var mainDeckCards = new Array();
+var getLands = function(lands){
+	var plains = {"id":"10001","innerid":"1","name":"plains","cmc":"0","color":"0","type":"1","rarity":"0","power":null,"toughness":null,"expansion":"RAV"}
+	var island = {"id":"10002","innerid":"2","name":"island","cmc":"0","color":"0","type":"1","rarity":"0","power":null,"toughness":null,"expansion":"RAV"}
+	var swamp = {"id":"10003","innerid":"3","name":"swamp","cmc":"0","color":"0","type":"1","rarity":"0","power":null,"toughness":null,"expansion":"RAV"}
+	var mountain = {"id":"10004","innerid":"4","name":"mountain","cmc":"0","color":"0","type":"1","rarity":"0","power":null,"toughness":null,"expansion":"RAV"}
+	var forest = {"id":"10005","innerid":"5","name":"forest","cmc":"0","color":"0","type":"1","rarity":"0","power":null,"toughness":null,"expansion":"RAV"}
+	for (i = 0; i<5; i++)
+	{
+		for (j = 0; j < lands[i]; j++)
+		{
+			if (i==0) mainDeckCards.push(plains);
+			if (i==1) mainDeckCards.push(island);
+			if (i==2) mainDeckCards.push(swamp);
+			if (i==3) mainDeckCards.push(mountain);
+			if (i==4) mainDeckCards.push(forest);
+		}
+	}
+}
 var analyzeMessage = function(msg){
 	//alert(msg.data);
 	var message = msg.data;
@@ -47,7 +66,6 @@ var analyzeMessage = function(msg){
 		if (messageBody!="")
 		{
 			cards = eval(messageBody);
-			alert(cards[1]['name']);
 		}
 		else
 		{
