@@ -3,14 +3,24 @@
 <link rel="stylesheet" type="text/css" href="util.css" />
 <script src="../lib/jQuery.js"></script>
 <script>
+var previousBasicLandCount = 0;
 function submit(){
-var lands = new Array();
-lands[0] = parseInt($("#W").attr('value'));
-lands[1] = parseInt($("#U").attr('value'));
-lands[2] = parseInt($("#B").attr('value'));
-lands[3] = parseInt($("#R").attr('value'));
-lands[4] = parseInt($("#G").attr('value'));
-top.document.getElementById('sideframe').contentDocument.getElementById('userinfoframe').contentWindow.getLands(lands);
+	var lands = new Array();
+	lands[0] = parseInt($("#W").attr('value'));
+	lands[1] = parseInt($("#U").attr('value'));
+	lands[2] = parseInt($("#B").attr('value'));
+	lands[3] = parseInt($("#R").attr('value'));
+	lands[4] = parseInt($("#G").attr('value'));
+	top.document.getElementById('sideframe').contentDocument.getElementById('userinfoframe').contentWindow.getLands(lands);
+	var handle = top.document.getElementById('sideframe').contentDocument.getElementById('deckinfoframe').contentDocument.getElementById('totalLands');
+	var count = parseInt(handle.innerHTML);
+	count -= previousBasicLandCount;
+	for (i = 0; i < 5; i++)
+	{
+		count += lands[i];
+	}
+	handle.innerHTML = count;
+	previousBasicLandCount = count;
 }
 </script>
 </head>
